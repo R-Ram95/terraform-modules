@@ -11,7 +11,7 @@ This is a reusable Terraform module for setting up a terraform backend using AWS
 
 ```hcl
 module "terraform_backend" {
-  source        = "./path-to-your-module"
+  source        = "./path-to-aws_terraform_be-module"
 
   region        = "us-east-1"
   bucket_name   = "my-terraform-state-bucket"
