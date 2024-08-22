@@ -4,6 +4,7 @@ resource "aws_s3_bucket" "web_bucket" {
   tags          = local.web_bucket_tags
 }
 
+// Allow all origins
 resource "aws_s3_bucket_cors_configuration" "web_bucket_cors_config" {
   bucket = aws_s3_bucket.web_bucket.id
   cors_rule {
@@ -13,6 +14,7 @@ resource "aws_s3_bucket_cors_configuration" "web_bucket_cors_config" {
   }
 }
 
+// Objects in S3 are server-side encrypted
 resource "aws_s3_bucket_server_side_encryption_configuration" "s3_bucket_sse" {
   bucket = aws_s3_bucket.web_bucket.id
   rule {
