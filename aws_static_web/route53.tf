@@ -43,7 +43,7 @@ resource "aws_route53_record" "cert_validation_record" {
 
   allow_overwrite = true
   name            = each.value.name
-  records         = [each.value.records]
+  records         = [each.value.record]
   ttl             = 60 // DNS records cached for 60 seconds before re-requesting
   type            = each.value.type
   zone_id         = data.aws_route53_zone.hosted_zone[0].id
