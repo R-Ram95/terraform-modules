@@ -9,7 +9,7 @@ resource "aws_cloudfront_distribution" "cf_distribution" {
   price_class         = var.cf_price_class
   aliases = var.root_domain_name != "" ? [
     var.root_domain_name,
-    "www.${root_domain_name}"
+    "www.${var.root_domain_name}"
   ] : []
 
 

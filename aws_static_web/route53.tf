@@ -46,7 +46,7 @@ resource "aws_route53_record" "cert_validation_record" {
   records         = [each.value.records]
   ttl             = 60 // DNS records cached for 60 seconds before re-requesting
   type            = each.value.type
-  zone_id         = data.aws_route53_zone.hosted_zone.id
+  zone_id         = data.aws_route53_zone.hosted_zone[0].id
 }
 
 
