@@ -7,8 +7,10 @@ resource "aws_cloudfront_distribution" "cf_distribution" {
   default_root_object = var.default_root_object
   tags                = local.cf_distribution_tags
   price_class         = var.cf_price_class
-  # OPTIONAL FOR CNAME RECORDS
-  #   aliases             = local.cf_aliases
+  aliases = var.root_domain_name != "" ? [
+    var.root_domain_name,
+    "www.${root_domain_name}"
+  ] : []
 
 
   origin {
@@ -52,6 +54,22 @@ resource "aws_cloudfront_distribution" "cf_distribution" {
     }
   }
 
+  restrictions {
+    geo_restriction {
+      restriction_type = "none"
+    }
+  }
+
+  // Add our cert for https
+  viewer_certificate {
+    acm_certificate_arn            = var.root_domain_name != "" ? aws_acm_certificate.site_cert[0].arn : null // Add certs for custom domain name, else none
+    ssl_support_method             = "sni-only"
+    minimum_protocol_version       = "TLSv1.2_2018"
+    cloudfront_default_certificate = var.root_domain_name != "" ? false : true // use default cert if we do not provide one
+  }
+
+
+
   # Uncomment following block if caching becomes too sticky
   # This block disallows caching index.html only, which will force cloudfront to reach for new html and app version on every request, which may fix caching issues
   # ordered_cache_behavior {
@@ -85,18 +103,5 @@ resource "aws_cloudfront_distribution" "cf_distribution" {
   #     response_code         = 200
   #     response_page_path    = "/index.html"
   #   }
-
-  restrictions {
-    geo_restriction {
-      restriction_type = "none"
-    }
-  }
-
-  viewer_certificate {
-    acm_certificate_arn            = null
-    ssl_support_method             = "sni-only"
-    minimum_protocol_version       = "TLSv1.2_2018"
-    cloudfront_default_certificate = true
-  }
 }
 

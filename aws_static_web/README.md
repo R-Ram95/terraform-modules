@@ -2,14 +2,11 @@
 
 This is a reusable Terraform module for deploying static websites on AWS. It automates the creation of an S3 bucket for file storage and a CloudFront distribution to serve the content. It includes configurations for security, caching, and access control, making it suitable for hosting static web assets efficiently and securely.
 
-### TODO
-
-- [ ] add support for custom domains & SSL
-
 ### Features
 
 - **S3 Bucket**: File storage for static website files.
 - **CloudFront Distribution** To serve the website content.
+- **Optional Custom Domain and SSL/TLS**: Support for custom domains and HTTPS. NOTE: If you are using a custom domain, the domain must be registered with AWS Route53 in the same AWS account where you deploy the resources for the static web module.
 
 ### Example Usage
 
@@ -27,6 +24,7 @@ module "static_website" {
   // optional
   aws_profile          = "default"
   env                  = "production"
+  root_domain__name    = "example.com"
   cf_price_class       = "PriceClass_100"
   default_root_object = "index.html"
   content_types = {
@@ -53,6 +51,7 @@ module "static_website" {
 - **`path_to_bundle`** (Required): The file system path, relative to this module, to the frontend build files, which will be uploaded to S3 and served by CloudFront.
 - **`aws_profile`** (Optional): The AWS CLI profile to use. Defaults to `"default"`.
 - **`env`** (Optional): The environment to which the resources are deployed (e.g., "production", "staging"). Defaults to `"production"`.
+- **`root_domain_name`** (Optional): The root domain name (without the 'www.'). If provided.
 - **`cf_price_class`** (Optional): The price class for the CloudFront distribution. Defaults to `"PriceClass_100"`.
 - **`default_root_object`** (Optional): The default root object file name for CloudFront Distribution, including the extension (e.g., "index.html"). Defaults to `"index.html"`.
 - **`content_types`** (Optional): A map of file extensions to content types. Defaults to a common set of file types (`.html`, `.css`, `.js`, `.jpg`, `.png`, `.gif`, `.svg`, `.pdf`).
@@ -80,5 +79,5 @@ module "static_website" {
 - **State Management**: If using this module in a larger project, ensure that your Terraform state is managed appropriately, especially if deploying multiple environments. Consider using remote state storage and state locking to prevent conflicts.
 - **Error Handling**: Custom error responses are commented out. You can uncomment and customize these settings based on your application's error handling needs.
 - **Content Type Detection**: The content type mapping for files is based on file extensions. If you have non-standard file types or need more precise control, you might need to enhance the `content_types` variable and content type determination logic.
-- **HTTPS and Certificates**: The CloudFront distribution is configured to use the default CloudFront certificate. For custom domains, you will need to provide an ACM certificate ARN and update the `viewer_certificate` block accordingly.
+- **HTTPS and Certificates**: The CloudFront distribution is configured to use the default CloudFront certificate. For custom domains, you must provide the `root_domain_name` for a domain registered with AWS Route53 in the same AWS account where you deploy the resources for the static web module.
 - **Testing and Validation**: After deploying the module, test the deployment thoroughly to ensure that the S3 bucket and CloudFront distribution are correctly set up and serving your static content as expected.

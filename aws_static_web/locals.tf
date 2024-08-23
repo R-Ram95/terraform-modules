@@ -11,4 +11,10 @@ locals {
     project     = var.project_name
   }
 
+  acm_cert_tags = {
+    project     = var.project_name
+    environment = var.env
+  }
+
+
 }

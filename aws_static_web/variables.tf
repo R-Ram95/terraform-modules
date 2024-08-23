@@ -55,6 +55,12 @@ variable "path_to_bundle" {
   type        = string
 }
 
+variable "root_domain_name" {
+  description = "The root of your domain name (without the wwww.)"
+  type        = string
+  default     = ""
+}
+
 // TODO Improve this 
 variable "content_types" {
   type = map(string)
