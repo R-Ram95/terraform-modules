@@ -32,16 +32,14 @@ resource "aws_acm_certificate" "site_cert" {
 
 // Create Route 53 DNS records for ACM certificate validation
 resource "aws_route53_record" "cert_validation_record" {
-  count = var.root_domain_name ? 1 : 0
-
   // Create records for the domain and all sub-domains 
-  for_each = {
+  for_each = var.root_domain_name != "" ? {
     for dvo in aws_acm_certificate.site_cert[0].domain_validation_options : dvo.domain_name => {
       name   = dvo.resource_record_name
       record = dvo.resource_record_value
       type   = dvo.resource_record_type
     }
-  }
+  } : {}
 
   allow_overwrite = true
   name            = each.value.name
