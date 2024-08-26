@@ -1,6 +1,6 @@
 # Static Website Hosting using Terraform and AWS
 
-This is a reusable Terraform module for deploying static websites on AWS. It automates the creation of an S3 bucket for file storage and a CloudFront distribution to serve the content. It includes configurations for security, caching, and access control, making it suitable for hosting static web assets efficiently and securely.
+This is a reusable Terraform module for deploying static websites on AWS. It automates the creation of an S3 bucket for file storage and a CloudFront distribution to serve the content. It includes configurations for security, caching, and access control. Optionally, you may specify a custom domain that you have created in Route53. This module will request an SSL/TLS cert from ACM to enable https and it will create the necessary Alias records to map your domain to the cloudfront distribution's domain. NOTE: The custom domain must be created in the same AWS account that you are using the module in.
 
 ### Features
 

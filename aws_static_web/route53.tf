@@ -30,6 +30,34 @@ resource "aws_acm_certificate" "site_cert" {
   tags = local.acm_cert_tags
 }
 
+// Creates Route53 alias records for the root domain and maps it to the Cloudfront domain name
+resource "aws_route53_record" "root_domain" {
+  count   = var.root_domain_name != "" ? 1 : 0
+  zone_id = data.aws_route53_zone.hosted_zone[0].id
+  name    = var.root_domain_name
+  type    = "A"
+
+  alias {
+    name                   = aws_cloudfront_distribution.cf_distribution.domain_name
+    zone_id                = aws_cloudfront_distribution.cf_distribution.hosted_zone_id
+    evaluate_target_health = false
+  }
+}
+
+// Creates Route53 alias records for the www subdomain and maps it to the Cloudfront domain name
+resource "aws_route53_record" "www" {
+  count   = var.root_domain_name != "" ? 1 : 0
+  zone_id = data.aws_route53_zone.hosted_zone[0].id
+  name    = "www"
+  type    = "A"
+
+  alias {
+    name                   = aws_cloudfront_distribution.cf_distribution.domain_name
+    zone_id                = aws_cloudfront_distribution.cf_distribution.hosted_zone_id
+    evaluate_target_health = false
+  }
+}
+
 // Create Route 53 DNS records for ACM certificate validation
 resource "aws_route53_record" "cert_validation_record" {
   // Create records for the domain and all sub-domains 
