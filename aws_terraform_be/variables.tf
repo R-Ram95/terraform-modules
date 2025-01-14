@@ -21,10 +21,6 @@ variable "dynamodb_name" {
   default     = null
 }
 
-variable "aws_profile" {
-  description = "AWS Account to use"
-  type        = string
-}
 
 variable "project_name" {
   description = "The project name that will be applied to tags"
